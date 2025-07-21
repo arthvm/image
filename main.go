@@ -26,6 +26,7 @@ type Padding struct {
 type Config struct {
 	bgColor color.Color
 	padding Padding
+	quality int
 }
 
 func main() {
@@ -34,6 +35,9 @@ func main() {
 
 	var padding string
 	flag.StringVar(&padding, "padding", "", "Configure image padding")
+
+	var quality int
+	flag.IntVar(&quality, "quality", 50, "Defines the quality of the compression (0 to 100)")
 
 	flag.Parse()
 
@@ -61,6 +65,7 @@ func main() {
 	config := &Config{
 		bgColor: parsedColor,
 		padding: *parsedPadding,
+		quality: max(0, min(100, quality)),
 	}
 
 	if err := convertImage(inFile, outFile, config); err != nil {
@@ -247,7 +252,7 @@ func convertPNGToJPEG(inputFile string, outputFile string, config *Config) error
 	}
 
 	return jpeg.Encode(outFile, destImg, &jpeg.Options{
-		Quality: 50,
+		Quality: config.quality,
 	})
 }
 
