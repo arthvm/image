@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"image"
 	"image/color"
@@ -14,6 +13,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	flag "github.com/spf13/pflag"
 )
 
 type Padding struct {
@@ -31,13 +32,19 @@ type Config struct {
 
 func main() {
 	var bgColor string
-	flag.StringVar(&bgColor, "bg", "white", "Determines the background color for jpeg files")
+	flag.StringVarP(
+		&bgColor,
+		"background",
+		"b",
+		"white",
+		"Determines the background color for jpeg files",
+	)
 
 	var padding string
-	flag.StringVar(&padding, "padding", "", "Configure image padding")
+	flag.StringVarP(&padding, "padding", "p", "", "Configure image padding")
 
 	var quality int
-	flag.IntVar(&quality, "quality", 50, "Defines the quality of the compression (0 to 100)")
+	flag.IntVarP(&quality, "quality", "q", 50, "Defines the quality of the compression (0 to 100)")
 
 	flag.Parse()
 
